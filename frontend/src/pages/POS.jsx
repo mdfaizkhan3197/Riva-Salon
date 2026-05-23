@@ -144,7 +144,7 @@ function POS() {
         try {
             const res =
                 await axios.get(
-                    `https://riva-salon-backend.onrender.com/api/pos/sales-report/?type=${salesType}`
+                    `https://riva-salon-backend.onrender.com/api/pos/sales-report/?type=${salesType}`,
                     {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem(
@@ -463,7 +463,7 @@ function POS() {
                     editingInvoiceId
                 ) {
                     await axios.put(
-                        `https://riva-salon-backend.onrender.com/api/pos/update/${editingInvoiceId}/`
+                        `https://riva-salon-backend.onrender.com/api/pos/update/${editingInvoiceId}/`,
                         payload,
                         {
                             headers:
