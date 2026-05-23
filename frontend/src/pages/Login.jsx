@@ -37,7 +37,7 @@ function Login() {
       setLoading(true);
 
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/accounts/login/",
+        "https://riva-salon-backend.onrender.com/api/accounts/login/",
         {
           username,
           password,
@@ -183,11 +183,10 @@ function Login() {
             }}
             onClick={handleLogin}
             disabled={loading}
-            className={`w-full py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 transition shadow-2xl ${
-              loading
+            className={`w-full py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 transition shadow-2xl ${loading
                 ? "bg-gray-600 cursor-not-allowed"
                 : "bg-gradient-to-r from-pink-500 to-purple-500"
-            }`}
+              }`}
           >
             {loading ? (
               "Logging in..."

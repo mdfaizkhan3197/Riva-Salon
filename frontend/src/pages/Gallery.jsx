@@ -21,7 +21,7 @@ function Gallery() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [title, setTitle] = useState("");
 
-  const BASE_URL = "http://127.0.0.1:8000";
+  const BASE_URL = "https://riva-salon-backend.onrender.com";
 
   useEffect(() => {
     const token = localStorage.getItem("token");

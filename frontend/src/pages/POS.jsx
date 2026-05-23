@@ -119,7 +119,7 @@ function POS() {
         try {
             const res =
                 await axios.get(
-                    "http://127.0.0.1:8000/api/services/"
+                "https://riva-salon-backend.onrender.com/api/services/"
                 );
 
             const data =
@@ -144,7 +144,7 @@ function POS() {
         try {
             const res =
                 await axios.get(
-                    `http://127.0.0.1:8000/api/pos/sales-report/?type=${salesType}`,
+                    `https://riva-salon-backend.onrender.com/api/pos/sales-report/?type=${salesType}`
                     {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem(
@@ -463,7 +463,7 @@ function POS() {
                     editingInvoiceId
                 ) {
                     await axios.put(
-                        `http://127.0.0.1:8000/api/pos/update/${editingInvoiceId}/`,
+                        `https://riva-salon-backend.onrender.com/api/pos/update/${editingInvoiceId}/`
                         payload,
                         {
                             headers:
@@ -480,7 +480,7 @@ function POS() {
                     );
                 } else {
                     await axios.post(
-                        "http://127.0.0.1:8000/api/pos/create/",
+                        "https://riva-salon-backend.onrender.com/api/pos/create/",
                         payload,
                         {
                             headers:
@@ -553,7 +553,7 @@ function POS() {
         async (id) => {
             try {
                 await axios.delete(
-                    `http://127.0.0.1:8000/api/pos/delete/${id}/`,
+                    `https://riva-salon-backend.onrender.com/api/pos/delete/${id}/`,
                     {
                         headers:
                             {
@@ -580,7 +580,7 @@ function POS() {
             try {
                 const res =
                     await axios.get(
-                        "http://127.0.0.1:8000/api/pos/invoices/",
+                        "https://riva-salon-backend.onrender.com/api/pos/invoices/",
                         {
                             headers:
                                 {
