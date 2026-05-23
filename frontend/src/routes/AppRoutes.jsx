@@ -37,8 +37,8 @@ function AppRoutes() {
           <Route index element={<AdminDashboard />} />
           <Route path="bookings" element={<AdminBookings />} />
           <Route path="inventory" element={<AdminInventory />} />
-          <Route path="/admin/staff" element={<AdminStaff />} />
-          <Route path="/admin/attendance" element={<AdminAttendance />} />
+          <Route path="staff" element={<AdminStaff />} />
+          <Route path="attendance" element={<AdminAttendance />} />
           <Route path="pos" element={<POS />} />
         </Route>
       </Routes>

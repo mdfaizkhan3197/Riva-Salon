@@ -7,7 +7,7 @@ import {
 
 import axios from "axios";
 
-import Navbar from "../components/Navbar";
+import Navbar from "../components/Navbar.jsx";
 
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";

@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 
 import { registerUser } from "../api/authAPI";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/Navbar.jsx";
 
 import { motion } from "framer-motion";
 

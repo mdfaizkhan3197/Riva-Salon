@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/Navbar.jsx";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
