@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import Navbar from "../components/Navbar.jsx";
-import { createBooking } from "../api/bookingApi";
+import { createBooking } from "../api/bookingAPI";
 
 import {
   CalendarDays,
