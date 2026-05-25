@@ -11,7 +11,7 @@ import {
   Clock3,
   ShieldCheck,
   Phone,
-  Mail,
+ Mail,
   MapPin,
 } from "lucide-react";
 
@@ -28,7 +28,9 @@ export default function Home() {
   useEffect(() => {
     axios
       .get(`${BASE_URL}/api/gallery/`)
-      .then((res) => setGallery(res.data))
+      .then((res) => {
+        setGallery(res.data);
+      })
       .catch((err) => console.log(err));
   }, []);
 
@@ -59,17 +61,17 @@ export default function Home() {
     <div className="bg-[#050505] text-white overflow-hidden">
       <Navbar />
 
+      {/* HERO SECTION */}
+
       <section className="relative min-h-screen flex items-center overflow-hidden">
 
         <img
-          src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9"
+          src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1600&auto=format&fit=crop"
           alt="Salon"
           className="absolute inset-0 w-full h-full object-cover scale-105"
         />
 
-
         <div className="absolute inset-0 bg-black/70" />
-
 
         <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-pink-500/20 rounded-full blur-3xl" />
 
@@ -77,7 +79,7 @@ export default function Home() {
 
         <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] bg-[size:80px_80px]" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 w-full grid lg:grid-cols-2 gap-16 items-center">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full grid lg:grid-cols-2 gap-16 items-center">
 
           <motion.div
             initial={{ opacity: 0, y: 60 }}
@@ -89,13 +91,13 @@ export default function Home() {
 
               <Sparkles size={15} className="text-pink-300" />
 
-              <span className="uppercase tracking-[4px] text-xs text-white/80">
+              <span className="uppercase tracking-[4px] text-[10px] sm:text-xs text-white/80">
                 Luxury Salon Experience
               </span>
 
             </div>
 
-            <h1 className="mt-8 text-6xl md:text-8xl font-black leading-[0.9] tracking-tight">
+            <h1 className="mt-8 text-5xl sm:text-6xl md:text-8xl font-black leading-[0.9] tracking-tight">
 
               Beauty
               <span className="block text-pink-400">
@@ -104,18 +106,16 @@ export default function Home() {
 
             </h1>
 
-            <p className="mt-8 text-lg md:text-2xl text-white/60 max-w-2xl leading-relaxed">
+            <p className="mt-8 text-base sm:text-lg md:text-2xl text-white/60 max-w-2xl leading-relaxed">
               Premium beauty experiences designed with elegance,
               confidence and modern luxury aesthetics.
             </p>
-
-            {/* BUTTONS */}
 
             <div className="flex flex-wrap gap-5 mt-12">
 
               <button
                 onClick={() => navigate("/services")}
-                className="bg-pink-500 hover:bg-pink-600 transition px-8 py-4 rounded-full text-lg font-medium flex items-center gap-3"
+                className="bg-pink-500 hover:bg-pink-600 transition px-6 sm:px-8 py-4 rounded-full text-sm sm:text-lg font-medium flex items-center gap-3"
               >
 
                 Book Appointment
@@ -126,14 +126,14 @@ export default function Home() {
 
               <button
                 onClick={() => navigate("/gallery")}
-                className="border border-white/10 bg-white/10 backdrop-blur-xl hover:bg-white/15 transition px-8 py-4 rounded-full"
+                className="border border-white/10 bg-white/10 backdrop-blur-xl hover:bg-white/15 transition px-6 sm:px-8 py-4 rounded-full text-sm sm:text-base"
               >
                 Explore Gallery
               </button>
 
             </div>
 
-            <div className="flex flex-wrap gap-10 mt-20">
+            <div className="flex flex-wrap gap-10 mt-16 sm:mt-20">
 
               {[
                 ["10K+", "Happy Clients"],
@@ -142,11 +142,11 @@ export default function Home() {
               ].map((item, i) => (
                 <div key={i}>
 
-                  <h2 className="text-4xl font-bold text-pink-300">
+                  <h2 className="text-3xl sm:text-4xl font-bold text-pink-300">
                     {item[0]}
                   </h2>
 
-                  <p className="text-white/50 mt-2">
+                  <p className="text-white/50 mt-2 text-sm sm:text-base">
                     {item[1]}
                   </p>
 
@@ -167,7 +167,7 @@ export default function Home() {
             <div className="absolute inset-0 bg-pink-500/20 blur-3xl rounded-full" />
 
             <img
-              src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f"
+              src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=1200&auto=format&fit=crop"
               alt="Beauty"
               className="relative rounded-3xl h-[700px] w-full object-cover border border-white/10"
             />
@@ -202,7 +202,9 @@ export default function Home() {
 
       </section>
 
-      <section className="py-32 px-6 bg-[#080808]">
+      {/* SERVICES */}
+
+      <section className="py-24 sm:py-32 px-4 sm:px-6 bg-[#080808]">
 
         <div className="max-w-7xl mx-auto">
 
@@ -212,7 +214,7 @@ export default function Home() {
               Our Services
             </p>
 
-            <h2 className="text-5xl md:text-7xl font-black mt-6 leading-tight">
+            <h2 className="text-4xl sm:text-5xl md:text-7xl font-black mt-6 leading-tight">
 
               Crafted For
               <span className="block text-white/40">
@@ -254,7 +256,9 @@ export default function Home() {
 
       </section>
 
-      <section className="py-32 px-6">
+      {/* WHY CHOOSE US */}
+
+      <section className="py-24 sm:py-32 px-4 sm:px-6">
 
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
 
@@ -264,9 +268,9 @@ export default function Home() {
           >
 
             <img
-              src="https://images.unsplash.com/photo-1560066984-138dadb4c035"
+              src="https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1200&auto=format&fit=crop"
               alt="Salon"
-              className="w-full h-[750px] object-cover"
+              className="w-full h-[450px] sm:h-[650px] lg:h-[750px] object-cover"
             />
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
@@ -279,7 +283,7 @@ export default function Home() {
               Why Choose Us
             </p>
 
-            <h2 className="text-5xl md:text-7xl font-black mt-6 leading-[0.95]">
+            <h2 className="text-4xl sm:text-5xl md:text-7xl font-black mt-6 leading-[0.95]">
 
               Timeless
               <span className="block text-white/40">
@@ -288,7 +292,7 @@ export default function Home() {
 
             </h2>
 
-            <p className="text-white/55 text-xl leading-relaxed mt-10 max-w-xl">
+            <p className="text-white/55 text-lg sm:text-xl leading-relaxed mt-10 max-w-xl">
               Every detail is designed with intention — from luxury
               ambience to expert beauty experiences.
             </p>
@@ -306,7 +310,7 @@ export default function Home() {
 
                 <div>
 
-                  <h4 className="text-2xl font-semibold">
+                  <h4 className="text-xl sm:text-2xl font-semibold">
                     Fast Professional Service
                   </h4>
 
@@ -329,7 +333,7 @@ export default function Home() {
 
                 <div>
 
-                  <h4 className="text-2xl font-semibold">
+                  <h4 className="text-xl sm:text-2xl font-semibold">
                     Luxury Products
                   </h4>
 
@@ -349,7 +353,9 @@ export default function Home() {
 
       </section>
 
-      <section className="py-32 px-6 bg-[#080808]">
+      {/* GALLERY */}
+
+      <section className="py-24 sm:py-32 px-4 sm:px-6 bg-[#080808]">
 
         <div className="max-w-7xl mx-auto">
 
@@ -359,7 +365,7 @@ export default function Home() {
               Gallery
             </p>
 
-            <h2 className="text-5xl md:text-7xl font-black mt-6">
+            <h2 className="text-4xl sm:text-5xl md:text-7xl font-black mt-6">
 
               Recent
               <span className="block text-white/40">
@@ -370,35 +376,53 @@ export default function Home() {
 
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-7">
 
-            {gallery.slice(0, 6).map((item) => (
-              <motion.div
-                key={item.id}
-                whileHover={{ scale: 1.03 }}
-                className="group relative overflow-hidden rounded-3xl border border-white/10"
-              >
+            {gallery.slice(0, 6).map((item) => {
 
-                {item.media_type === "image" ? (
-                  <img
-                    src={`${BASE_URL}${item.file}`}
-                    alt="Gallery"
-                    className="w-full h-[450px] object-cover group-hover:scale-110 transition duration-700"
-                  />
-                ) : (
-                  <video
-                    src={`${BASE_URL}${item.file}`}
-                    className="w-full h-[450px] object-cover"
-                    autoPlay
-                    muted
-                    loop
-                  />
-                )}
+              const mediaUrl = item.file?.startsWith("http")
+                ? item.file
+                : `${BASE_URL}${item.file}`;
 
-                <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition duration-500" />
+              return (
+                <motion.div
+                  key={item.id}
+                  whileHover={{ scale: 1.02 }}
+                  className="group relative overflow-hidden rounded-3xl border border-white/10 bg-[#111]"
+                >
 
-              </motion.div>
-            ))}
+                  {item.media_type === "image" ? (
+
+                    <img
+                      src={mediaUrl}
+                      alt="Gallery"
+                      loading="lazy"
+                      className="w-full h-[320px] sm:h-[400px] lg:h-[450px] object-cover group-hover:scale-110 transition duration-700"
+                      onError={(e) => {
+                        e.target.src =
+                          "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=1200&auto=format&fit=crop";
+                      }}
+                    />
+
+                  ) : (
+
+                    <video
+                      src={mediaUrl}
+                      className="w-full h-[320px] sm:h-[400px] lg:h-[450px] object-cover"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                    />
+
+                  )}
+
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition duration-500" />
+
+                </motion.div>
+              );
+            })}
 
           </div>
 
@@ -406,12 +430,13 @@ export default function Home() {
 
       </section>
 
+      {/* FOOTER */}
 
       <footer className="relative border-t border-white/10 bg-[#050505] overflow-hidden">
 
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-pink-500/10 blur-3xl rounded-full" />
 
-        <div className="max-w-7xl mx-auto px-6 py-20 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-20 relative z-10">
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-14">
 
@@ -419,7 +444,7 @@ export default function Home() {
 
               <h2 className="text-4xl font-black tracking-tight">
 
-                ＲＩ𝕍Λ 
+                ＲＩ𝕍Λ
                 <span className="text-pink-400">
                   .
                 </span>
