@@ -11,7 +11,7 @@ import {
   Clock3,
   ShieldCheck,
   Phone,
- Mail,
+  Mail,
   MapPin,
 } from "lucide-react";
 
@@ -28,9 +28,7 @@ export default function Home() {
   useEffect(() => {
     axios
       .get(`${BASE_URL}/api/gallery/`)
-      .then((res) => {
-        setGallery(res.data);
-      })
+      .then((res) => setGallery(res.data))
       .catch((err) => console.log(err));
   }, []);
 
@@ -378,51 +376,40 @@ export default function Home() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-7">
 
-            {gallery.slice(0, 6).map((item) => {
+            {gallery.slice(0, 6).map((item) => (
+              <motion.div
+                key={item.id}
+                whileHover={{ scale: 1.03 }}
+                className="group relative overflow-hidden rounded-3xl border border-white/10 bg-[#111]"
+              >
 
-              const mediaUrl = item.file?.startsWith("http")
-                ? item.file
-                : `${BASE_URL}${item.file}`;
+                {item.media_type === "image" ? (
 
-              return (
-                <motion.div
-                  key={item.id}
-                  whileHover={{ scale: 1.02 }}
-                  className="group relative overflow-hidden rounded-3xl border border-white/10 bg-[#111]"
-                >
+                  <img
+                    src={`${BASE_URL}${item.file}`}
+                    alt="Gallery"
+                    loading="lazy"
+                    className="w-full h-[320px] sm:h-[400px] lg:h-[450px] object-cover group-hover:scale-110 transition duration-700"
+                  />
 
-                  {item.media_type === "image" ? (
+                ) : (
 
-                    <img
-                      src={mediaUrl}
-                      alt="Gallery"
-                      loading="lazy"
-                      className="w-full h-[320px] sm:h-[400px] lg:h-[450px] object-cover group-hover:scale-110 transition duration-700"
-                      onError={(e) => {
-                        e.target.src =
-                          "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=1200&auto=format&fit=crop";
-                      }}
-                    />
+                  <video
+                    src={`${BASE_URL}${item.file}`}
+                    className="w-full h-[320px] sm:h-[400px] lg:h-[450px] object-cover"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                  />
 
-                  ) : (
+                )}
 
-                    <video
-                      src={mediaUrl}
-                      className="w-full h-[320px] sm:h-[400px] lg:h-[450px] object-cover"
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      preload="metadata"
-                    />
+                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition duration-500" />
 
-                  )}
-
-                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition duration-500" />
-
-                </motion.div>
-              );
-            })}
+              </motion.div>
+            ))}
 
           </div>
 
@@ -443,19 +430,13 @@ export default function Home() {
             <div>
 
               <h2 className="text-4xl font-black tracking-tight">
-
                 ＲＩ𝕍Λ
-                <span className="text-pink-400">
-                  .
-                </span>
-
+                <span className="text-pink-400">.</span>
               </h2>
 
               <p className="text-white/50 leading-relaxed mt-6">
-
                 Premium beauty salon crafted with luxury,
-                elegance and modern aesthetics for timeless beauty experiences.
-
+                elegance and modern aesthetics.
               </p>
 
             </div>
@@ -475,15 +456,8 @@ export default function Home() {
                   </div>
 
                   <div>
-
-                    <p className="text-white/40 text-sm">
-                      Phone
-                    </p>
-
-                    <p className="text-white/80">
-                      +91 98765 43210
-                    </p>
-
+                    <p className="text-white/40 text-sm">Phone</p>
+                    <p className="text-white/80">+91 98765 43210</p>
                   </div>
 
                 </div>
@@ -495,15 +469,8 @@ export default function Home() {
                   </div>
 
                   <div>
-
-                    <p className="text-white/40 text-sm">
-                      Email
-                    </p>
-
-                    <p className="text-white/80">
-                      rivasalon@gmail.com
-                    </p>
-
+                    <p className="text-white/40 text-sm">Email</p>
+                    <p className="text-white/80">rivasalon@gmail.com</p>
                   </div>
 
                 </div>
@@ -515,15 +482,8 @@ export default function Home() {
                   </div>
 
                   <div>
-
-                    <p className="text-white/40 text-sm">
-                      Location
-                    </p>
-
-                    <p className="text-white/80">
-                      Lucknow, India
-                    </p>
-
+                    <p className="text-white/40 text-sm">Location</p>
+                    <p className="text-white/80">Lucknow, India</p>
                   </div>
 
                 </div>
@@ -572,10 +532,7 @@ export default function Home() {
               </h3>
 
               <p className="text-white/50 leading-relaxed">
-
-                Follow us on Instagram for latest beauty transformations,
-                salon updates and luxury experiences.
-
+                Follow us on Instagram for latest beauty transformations.
               </p>
 
               <a
