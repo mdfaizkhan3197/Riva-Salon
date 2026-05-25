@@ -18,62 +18,80 @@ function Gallery() {
   const [items, setItems] = useState([]);
   const [selectedIndex, setSelectedIndex] =
     useState(null);
+
   const [file, setFile] = useState(null);
+
   const [mediaType, setMediaType] =
     useState("image");
+
   const [isAdmin, setIsAdmin] =
     useState(false);
+
   const [title, setTitle] = useState("");
 
   const BASE_URL =
     "https://riva-salon-backend.onrender.com";
 
-  // FIXED MEDIA URL FUNCTION
+  // FIX MEDIA URL
   const getMediaUrl = (file) => {
     if (!file) return "";
 
-    // Cloudinary URL
+    // Cloudinary full URL
     if (file.startsWith("http")) {
       return file;
     }
 
-    // Backend relative URL
+    // Local backend media URL
     return `${BASE_URL}${file}`;
   };
 
+  // CHECK ADMIN
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        setIsAdmin(decoded.is_staff === true);
+
+        setIsAdmin(
+          decoded.is_staff === true
+        );
       } catch {
         setIsAdmin(false);
       }
     }
   }, []);
 
+  // FETCH GALLERY
   useEffect(() => {
     fetchGallery();
   }, []);
 
   const fetchGallery = async () => {
     try {
-      const res = await axiosInstance.get(
-        "gallery/"
+      const res =
+        await axiosInstance.get(
+          "gallery/"
+        );
+
+      console.log(
+        "Gallery Data:",
+        res.data
       );
 
-      console.log(res.data);
-
-      setItems(res.data);
+      setItems(res.data || []);
     } catch (err) {
-      console.error(err);
+      console.error(
+        "Gallery fetch error:",
+        err
+      );
     }
   };
 
+  // UPLOAD
   const handleUpload = async () => {
-    if (!file) return alert("Select file");
+    if (!file)
+      return alert("Select file");
 
     const formData = new FormData();
 
@@ -92,23 +110,38 @@ function Gallery() {
     try {
       await axiosInstance.post(
         "gallery/upload/",
-        formData
+        formData,
+        {
+          headers: {
+            "Content-Type":
+              "multipart/form-data",
+          },
+        }
       );
+
+      alert("Upload successful");
 
       setFile(null);
       setTitle("");
 
       fetchGallery();
-
-      alert("Upload successful");
     } catch (err) {
-      console.error(err);
+      console.error(
+        "Upload error:",
+        err.response?.data || err
+      );
+
       alert("Upload failed");
     }
   };
 
+  // DELETE
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete media?"))
+    if (
+      !window.confirm(
+        "Delete media?"
+      )
+    )
       return;
 
     try {
@@ -122,6 +155,7 @@ function Gallery() {
     }
   };
 
+  // VIEWER
   const closeViewer = () =>
     setSelectedIndex(null);
 
@@ -139,9 +173,11 @@ function Gallery() {
         : prev - 1
     );
 
+  // KEYBOARD
   useEffect(() => {
     const handleKey = (e) => {
-      if (selectedIndex === null) return;
+      if (selectedIndex === null)
+        return;
 
       if (e.key === "Escape")
         closeViewer();
@@ -163,7 +199,7 @@ function Gallery() {
         "keydown",
         handleKey
       );
-  }, [selectedIndex]);
+  }, [selectedIndex, items]);
 
   return (
     <>
@@ -171,14 +207,14 @@ function Gallery() {
 
       <div className="min-h-screen bg-black text-white overflow-hidden relative">
 
-        {/* Background Glow */}
+        {/* Background */}
         <div className="absolute top-[-100px] left-[-100px] w-[400px] h-[400px] bg-pink-500/20 blur-3xl rounded-full animate-pulse"></div>
 
         <div className="absolute bottom-[-100px] right-[-100px] w-[400px] h-[400px] bg-purple-500/20 blur-3xl rounded-full animate-pulse"></div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-14">
 
-          {/* Header */}
+          {/* HEADER */}
           <motion.div
             initial={{
               opacity: 0,
@@ -216,7 +252,7 @@ function Gallery() {
             </p>
           </motion.div>
 
-          {/* Upload Section */}
+          {/* ADMIN UPLOAD */}
           {isAdmin && (
             <motion.div
               initial={{
@@ -294,7 +330,7 @@ function Gallery() {
             </motion.div>
           )}
 
-          {/* Gallery Grid */}
+          {/* GALLERY */}
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
 
             {items.map((item, index) => (
@@ -318,7 +354,7 @@ function Gallery() {
                 whileHover={{
                   scale: 1.02,
                 }}
-                className="relative group overflow-hidden rounded-[30px] break-inside-avoid cursor-pointer"
+                className="relative group overflow-hidden rounded-[30px] break-inside-avoid cursor-pointer bg-zinc-900"
                 onClick={() =>
                   setSelectedIndex(
                     index
@@ -326,6 +362,7 @@ function Gallery() {
                 }
               >
 
+                {/* IMAGE */}
                 {item.media_type ===
                 "image" ? (
                   <img
@@ -333,10 +370,22 @@ function Gallery() {
                       item.file
                     )}
                     alt={item.title}
+                    loading="lazy"
+                    onError={(e) => {
+                      console.log(
+                        "Image failed:",
+                        item.file
+                      );
+
+                      e.target.src =
+                        "https://via.placeholder.com/600x600?text=Image+Not+Found";
+                    }}
                     className="w-full object-cover rounded-[30px] transition duration-700 group-hover:scale-110"
                   />
                 ) : (
                   <div className="relative">
+
+                    {/* VIDEO */}
                     <video
                       src={getMediaUrl(
                         item.file
@@ -352,8 +401,10 @@ function Gallery() {
                   </div>
                 )}
 
+                {/* OVERLAY */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-70 group-hover:opacity-100 transition"></div>
 
+                {/* TEXT */}
                 <div className="absolute bottom-0 left-0 right-0 p-6">
 
                   <h2 className="text-2xl font-bold text-white">
@@ -365,10 +416,12 @@ function Gallery() {
                   </p>
                 </div>
 
+                {/* DELETE */}
                 {isAdmin && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
+
                       handleDelete(
                         item.id
                       );
@@ -383,121 +436,124 @@ function Gallery() {
           </div>
         </div>
 
-        {/* Fullscreen Viewer */}
+        {/* FULLSCREEN */}
         <AnimatePresence>
           {selectedIndex !==
-            null && (
-            <motion.div
-              initial={{
-                opacity: 0,
-              }}
-              animate={{
-                opacity: 1,
-              }}
-              exit={{
-                opacity: 0,
-              }}
-              className="fixed inset-0 bg-black/95 backdrop-blur-2xl z-50 flex items-center justify-center"
-            >
-
-              <button
-                onClick={
-                  closeViewer
-                }
-                className="absolute top-6 right-6 bg-white/10 hover:bg-white/20 p-4 rounded-full"
-              >
-                <FaTimes className="text-2xl" />
-              </button>
-
-              <button
-                onClick={prev}
-                className="absolute left-6 bg-white/10 hover:bg-white/20 p-4 rounded-full"
-              >
-                <FaChevronLeft className="text-3xl" />
-              </button>
-
-              <button
-                onClick={next}
-                className="absolute right-6 bg-white/10 hover:bg-white/20 p-4 rounded-full"
-              >
-                <FaChevronRight className="text-3xl" />
-              </button>
-
+            null &&
+            items[
+              selectedIndex
+            ] && (
               <motion.div
-                key={
-                  selectedIndex
-                }
                 initial={{
-                  scale: 0.8,
                   opacity: 0,
                 }}
                 animate={{
-                  scale: 1,
                   opacity: 1,
                 }}
                 exit={{
-                  scale: 0.8,
                   opacity: 0,
                 }}
-                transition={{
-                  duration: 0.4,
-                }}
-                className="max-w-6xl w-full px-6"
+                className="fixed inset-0 bg-black/95 backdrop-blur-2xl z-50 flex items-center justify-center"
               >
 
-                {items[
-                  selectedIndex
-                ]
-                  .media_type ===
-                "image" ? (
-                  <img
-                    src={getMediaUrl(
-                      items[
-                        selectedIndex
-                      ].file
-                    )}
-                    alt={
-                      items[
-                        selectedIndex
-                      ].title
-                    }
-                    className="max-h-[82vh] mx-auto rounded-[30px] shadow-[0_0_80px_rgba(236,72,153,0.25)]"
-                  />
-                ) : (
-                  <video
-                    src={getMediaUrl(
-                      items[
-                        selectedIndex
-                      ].file
-                    )}
-                    controls
-                    autoPlay
-                    className="max-h-[82vh] mx-auto rounded-[30px]"
-                  />
-                )}
+                <button
+                  onClick={
+                    closeViewer
+                  }
+                  className="absolute top-6 right-6 bg-white/10 hover:bg-white/20 p-4 rounded-full"
+                >
+                  <FaTimes className="text-2xl" />
+                </button>
 
-                <div className="text-center mt-6">
-                  <h2 className="text-4xl font-bold">
-                    {
-                      items[
-                        selectedIndex
-                      ].title
-                    }
-                  </h2>
+                <button
+                  onClick={prev}
+                  className="absolute left-6 bg-white/10 hover:bg-white/20 p-4 rounded-full"
+                >
+                  <FaChevronLeft className="text-3xl" />
+                </button>
 
-                  <p className="text-gray-400 mt-2 capitalize">
-                    {
-                      items[
-                        selectedIndex
-                      ]
-                        .media_type
-                    }
-                  </p>
-                </div>
+                <button
+                  onClick={next}
+                  className="absolute right-6 bg-white/10 hover:bg-white/20 p-4 rounded-full"
+                >
+                  <FaChevronRight className="text-3xl" />
+                </button>
 
+                <motion.div
+                  key={
+                    selectedIndex
+                  }
+                  initial={{
+                    scale: 0.8,
+                    opacity: 0,
+                  }}
+                  animate={{
+                    scale: 1,
+                    opacity: 1,
+                  }}
+                  exit={{
+                    scale: 0.8,
+                    opacity: 0,
+                  }}
+                  transition={{
+                    duration: 0.4,
+                  }}
+                  className="max-w-6xl w-full px-6"
+                >
+
+                  {items[
+                    selectedIndex
+                  ]
+                    .media_type ===
+                  "image" ? (
+                    <img
+                      src={getMediaUrl(
+                        items[
+                          selectedIndex
+                        ].file
+                      )}
+                      alt={
+                        items[
+                          selectedIndex
+                        ].title
+                      }
+                      className="max-h-[82vh] mx-auto rounded-[30px] shadow-[0_0_80px_rgba(236,72,153,0.25)]"
+                    />
+                  ) : (
+                    <video
+                      src={getMediaUrl(
+                        items[
+                          selectedIndex
+                        ].file
+                      )}
+                      controls
+                      autoPlay
+                      className="max-h-[82vh] mx-auto rounded-[30px]"
+                    />
+                  )}
+
+                  <div className="text-center mt-6">
+                    <h2 className="text-4xl font-bold">
+                      {
+                        items[
+                          selectedIndex
+                        ].title
+                      }
+                    </h2>
+
+                    <p className="text-gray-400 mt-2 capitalize">
+                      {
+                        items[
+                          selectedIndex
+                        ]
+                          .media_type
+                      }
+                    </p>
+                  </div>
+
+                </motion.div>
               </motion.div>
-            </motion.div>
-          )}
+            )}
         </AnimatePresence>
       </div>
     </>
