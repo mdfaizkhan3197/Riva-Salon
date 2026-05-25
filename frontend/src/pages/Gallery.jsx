@@ -3,6 +3,7 @@ import axiosInstance from "../utils/axiosInstance";
 import Navbar from "../components/Navbar.jsx";
 import { jwtDecode } from "jwt-decode";
 import { motion, AnimatePresence } from "framer-motion";
+
 import {
   FaTrash,
   FaTimes,
@@ -20,8 +21,6 @@ function Gallery() {
   const [mediaType, setMediaType] = useState("image");
   const [isAdmin, setIsAdmin] = useState(false);
   const [title, setTitle] = useState("");
-
-  const BASE_URL = "https://riva-salon-backend.onrender.com";
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -58,22 +57,33 @@ function Gallery() {
     formData.append("media_type", mediaType);
     formData.append("file", file);
 
-    await axiosInstance.post(
-      "gallery/upload/",
-      formData
-    );
+    try {
+      await axiosInstance.post(
+        "gallery/upload/",
+        formData
+      );
 
-    setFile(null);
-    setTitle("");
+      setFile(null);
+      setTitle("");
 
-    fetchGallery();
+      fetchGallery();
+
+      alert("Upload successful");
+    } catch (err) {
+      console.error(err);
+      alert("Upload failed");
+    }
   };
 
   const handleDelete = async (id) => {
     if (!window.confirm("Delete media?")) return;
 
-    await axiosInstance.delete(`gallery/${id}/`);
-    fetchGallery();
+    try {
+      await axiosInstance.delete(`gallery/${id}/`);
+      fetchGallery();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const closeViewer = () => setSelectedIndex(null);
@@ -109,13 +119,14 @@ function Gallery() {
 
       <div className="min-h-screen bg-black text-white overflow-hidden relative">
 
-        {/* Animated Background */}
+        {/* Background Glow */}
         <div className="absolute top-[-100px] left-[-100px] w-[400px] h-[400px] bg-pink-500/20 blur-3xl rounded-full animate-pulse"></div>
 
         <div className="absolute bottom-[-100px] right-[-100px] w-[400px] h-[400px] bg-purple-500/20 blur-3xl rounded-full animate-pulse"></div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-14">
 
+          {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -141,6 +152,7 @@ function Gallery() {
             </p>
           </motion.div>
 
+          {/* Upload Section */}
           {isAdmin && (
             <motion.div
               initial={{ opacity: 0, y: 60 }}
@@ -199,6 +211,7 @@ function Gallery() {
             </motion.div>
           )}
 
+          {/* Gallery Grid */}
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
 
             {items.map((item, index) => (
@@ -229,14 +242,14 @@ function Gallery() {
 
                 {item.media_type === "image" ? (
                   <img
-                    src={`${BASE_URL}${item.file}`}
+                    src={item.file}
                     alt={item.title}
                     className="w-full object-cover rounded-[30px] transition duration-700 group-hover:scale-110"
                   />
                 ) : (
                   <div className="relative">
                     <video
-                      src={`${BASE_URL}${item.file}`}
+                      src={item.file}
                       className="w-full rounded-[30px]"
                     />
 
@@ -252,13 +265,9 @@ function Gallery() {
 
                 <div className="absolute bottom-0 left-0 right-0 p-6">
 
-                  <motion.h2
-                    initial={{ y: 20, opacity: 0 }}
-                    whileHover={{ y: 0, opacity: 1 }}
-                    className="text-2xl font-bold text-white"
-                  >
+                  <h2 className="text-2xl font-bold text-white">
                     {item.title}
-                  </motion.h2>
+                  </h2>
 
                   <p className="text-gray-300 capitalize mt-1">
                     {item.media_type}
@@ -281,6 +290,7 @@ function Gallery() {
           </div>
         </div>
 
+        {/* Fullscreen Viewer */}
         <AnimatePresence>
           {selectedIndex !== null && (
             <motion.div
@@ -328,10 +338,11 @@ function Gallery() {
                 transition={{ duration: 0.4 }}
                 className="max-w-6xl w-full px-6"
               >
+
                 {items[selectedIndex].media_type ===
                 "image" ? (
                   <img
-                    src={`${BASE_URL}${items[selectedIndex].file}`}
+                    src={items[selectedIndex].file}
                     alt={
                       items[selectedIndex].title
                     }
@@ -339,7 +350,7 @@ function Gallery() {
                   />
                 ) : (
                   <video
-                    src={`${BASE_URL}${items[selectedIndex].file}`}
+                    src={items[selectedIndex].file}
                     controls
                     autoPlay
                     className="max-h-[82vh] mx-auto rounded-[30px]"
@@ -358,6 +369,7 @@ function Gallery() {
                     }
                   </p>
                 </div>
+
               </motion.div>
             </motion.div>
           )}
