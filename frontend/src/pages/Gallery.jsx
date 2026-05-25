@@ -16,11 +16,30 @@ import {
 
 function Gallery() {
   const [items, setItems] = useState([]);
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedIndex, setSelectedIndex] =
+    useState(null);
   const [file, setFile] = useState(null);
-  const [mediaType, setMediaType] = useState("image");
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [mediaType, setMediaType] =
+    useState("image");
+  const [isAdmin, setIsAdmin] =
+    useState(false);
   const [title, setTitle] = useState("");
+
+  const BASE_URL =
+    "https://riva-salon-backend.onrender.com";
+
+  // FIXED MEDIA URL FUNCTION
+  const getMediaUrl = (file) => {
+    if (!file) return "";
+
+    // Cloudinary URL
+    if (file.startsWith("http")) {
+      return file;
+    }
+
+    // Backend relative URL
+    return `${BASE_URL}${file}`;
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -41,7 +60,12 @@ function Gallery() {
 
   const fetchGallery = async () => {
     try {
-      const res = await axiosInstance.get("gallery/");
+      const res = await axiosInstance.get(
+        "gallery/"
+      );
+
+      console.log(res.data);
+
       setItems(res.data);
     } catch (err) {
       console.error(err);
@@ -53,8 +77,16 @@ function Gallery() {
 
     const formData = new FormData();
 
-    formData.append("title", title || file.name);
-    formData.append("media_type", mediaType);
+    formData.append(
+      "title",
+      title || file.name
+    );
+
+    formData.append(
+      "media_type",
+      mediaType
+    );
+
     formData.append("file", file);
 
     try {
@@ -76,41 +108,61 @@ function Gallery() {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete media?")) return;
+    if (!window.confirm("Delete media?"))
+      return;
 
     try {
-      await axiosInstance.delete(`gallery/${id}/`);
+      await axiosInstance.delete(
+        `gallery/${id}/`
+      );
+
       fetchGallery();
     } catch (err) {
       console.error(err);
     }
   };
 
-  const closeViewer = () => setSelectedIndex(null);
+  const closeViewer = () =>
+    setSelectedIndex(null);
 
   const next = () =>
     setSelectedIndex((prev) =>
-      prev === items.length - 1 ? 0 : prev + 1
+      prev === items.length - 1
+        ? 0
+        : prev + 1
     );
 
   const prev = () =>
     setSelectedIndex((prev) =>
-      prev === 0 ? items.length - 1 : prev - 1
+      prev === 0
+        ? items.length - 1
+        : prev - 1
     );
 
   useEffect(() => {
     const handleKey = (e) => {
       if (selectedIndex === null) return;
 
-      if (e.key === "Escape") closeViewer();
-      if (e.key === "ArrowRight") next();
-      if (e.key === "ArrowLeft") prev();
+      if (e.key === "Escape")
+        closeViewer();
+
+      if (e.key === "ArrowRight")
+        next();
+
+      if (e.key === "ArrowLeft")
+        prev();
     };
 
-    window.addEventListener("keydown", handleKey);
+    window.addEventListener(
+      "keydown",
+      handleKey
+    );
 
     return () =>
-      window.removeEventListener("keydown", handleKey);
+      window.removeEventListener(
+        "keydown",
+        handleKey
+      );
   }, [selectedIndex]);
 
   return (
@@ -128,9 +180,17 @@ function Gallery() {
 
           {/* Header */}
           <motion.div
-            initial={{ opacity: 0, y: -40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            initial={{
+              opacity: 0,
+              y: -40,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.8,
+            }}
             className="text-center mb-16"
           >
             <div className="flex justify-center mb-5">
@@ -147,17 +207,29 @@ function Gallery() {
             </h1>
 
             <p className="text-gray-400 mt-6 max-w-2xl mx-auto text-lg leading-relaxed">
-              Explore luxury transformations, glamorous styles,
-              premium salon experiences & beauty artistry.
+              Explore luxury
+              transformations,
+              glamorous styles,
+              premium salon
+              experiences &
+              beauty artistry.
             </p>
           </motion.div>
 
           {/* Upload Section */}
           {isAdmin && (
             <motion.div
-              initial={{ opacity: 0, y: 60 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              initial={{
+                opacity: 0,
+                y: 60,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: 0.6,
+              }}
               className="bg-white/5 border border-white/10 backdrop-blur-2xl rounded-[30px] p-8 shadow-[0_0_50px_rgba(236,72,153,0.15)] mb-14"
             >
               <div className="flex items-center gap-3 mb-6">
@@ -175,18 +247,27 @@ function Gallery() {
                 <select
                   value={mediaType}
                   onChange={(e) =>
-                    setMediaType(e.target.value)
+                    setMediaType(
+                      e.target.value
+                    )
                   }
                   className="bg-black/40 border border-gray-700 p-4 rounded-2xl outline-none focus:border-pink-500"
                 >
-                  <option value="image">Image</option>
-                  <option value="video">Video</option>
+                  <option value="image">
+                    Image
+                  </option>
+
+                  <option value="video">
+                    Video
+                  </option>
                 </select>
 
                 <input
                   type="file"
                   onChange={(e) =>
-                    setFile(e.target.files[0])
+                    setFile(
+                      e.target.files[0]
+                    )
                   }
                   className="bg-black/40 border border-gray-700 p-4 rounded-2xl outline-none focus:border-pink-500"
                 />
@@ -196,7 +277,9 @@ function Gallery() {
                   placeholder="Media title..."
                   value={title}
                   onChange={(e) =>
-                    setTitle(e.target.value)
+                    setTitle(
+                      e.target.value
+                    )
                   }
                   className="bg-black/40 border border-gray-700 p-4 rounded-2xl outline-none focus:border-pink-500"
                 />
@@ -229,27 +312,35 @@ function Gallery() {
                 }}
                 transition={{
                   duration: 0.5,
-                  delay: index * 0.05,
+                  delay:
+                    index * 0.05,
                 }}
                 whileHover={{
                   scale: 1.02,
                 }}
                 className="relative group overflow-hidden rounded-[30px] break-inside-avoid cursor-pointer"
                 onClick={() =>
-                  setSelectedIndex(index)
+                  setSelectedIndex(
+                    index
+                  )
                 }
               >
 
-                {item.media_type === "image" ? (
+                {item.media_type ===
+                "image" ? (
                   <img
-                    src={item.file}
+                    src={getMediaUrl(
+                      item.file
+                    )}
                     alt={item.title}
                     className="w-full object-cover rounded-[30px] transition duration-700 group-hover:scale-110"
                   />
                 ) : (
                   <div className="relative">
                     <video
-                      src={item.file}
+                      src={getMediaUrl(
+                        item.file
+                      )}
                       className="w-full rounded-[30px]"
                     />
 
@@ -278,7 +369,9 @@ function Gallery() {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleDelete(item.id);
+                      handleDelete(
+                        item.id
+                      );
                     }}
                     className="absolute top-4 right-4 bg-red-500 hover:bg-red-600 p-3 rounded-full opacity-0 group-hover:opacity-100 transition"
                   >
@@ -292,16 +385,25 @@ function Gallery() {
 
         {/* Fullscreen Viewer */}
         <AnimatePresence>
-          {selectedIndex !== null && (
+          {selectedIndex !==
+            null && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              exit={{
+                opacity: 0,
+              }}
               className="fixed inset-0 bg-black/95 backdrop-blur-2xl z-50 flex items-center justify-center"
             >
 
               <button
-                onClick={closeViewer}
+                onClick={
+                  closeViewer
+                }
                 className="absolute top-6 right-6 bg-white/10 hover:bg-white/20 p-4 rounded-full"
               >
                 <FaTimes className="text-2xl" />
@@ -322,7 +424,9 @@ function Gallery() {
               </button>
 
               <motion.div
-                key={selectedIndex}
+                key={
+                  selectedIndex
+                }
                 initial={{
                   scale: 0.8,
                   opacity: 0,
@@ -335,22 +439,37 @@ function Gallery() {
                   scale: 0.8,
                   opacity: 0,
                 }}
-                transition={{ duration: 0.4 }}
+                transition={{
+                  duration: 0.4,
+                }}
                 className="max-w-6xl w-full px-6"
               >
 
-                {items[selectedIndex].media_type ===
+                {items[
+                  selectedIndex
+                ]
+                  .media_type ===
                 "image" ? (
                   <img
-                    src={items[selectedIndex].file}
+                    src={getMediaUrl(
+                      items[
+                        selectedIndex
+                      ].file
+                    )}
                     alt={
-                      items[selectedIndex].title
+                      items[
+                        selectedIndex
+                      ].title
                     }
                     className="max-h-[82vh] mx-auto rounded-[30px] shadow-[0_0_80px_rgba(236,72,153,0.25)]"
                   />
                 ) : (
                   <video
-                    src={items[selectedIndex].file}
+                    src={getMediaUrl(
+                      items[
+                        selectedIndex
+                      ].file
+                    )}
                     controls
                     autoPlay
                     className="max-h-[82vh] mx-auto rounded-[30px]"
@@ -359,12 +478,18 @@ function Gallery() {
 
                 <div className="text-center mt-6">
                   <h2 className="text-4xl font-bold">
-                    {items[selectedIndex].title}
+                    {
+                      items[
+                        selectedIndex
+                      ].title
+                    }
                   </h2>
 
                   <p className="text-gray-400 mt-2 capitalize">
                     {
-                      items[selectedIndex]
+                      items[
+                        selectedIndex
+                      ]
                         .media_type
                     }
                   </p>
