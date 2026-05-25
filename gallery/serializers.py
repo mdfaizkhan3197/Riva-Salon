@@ -3,14 +3,23 @@ from .models import Gallery
 
 
 class GallerySerializer(serializers.ModelSerializer):
-    file = serializers.SerializerMethodField()
 
     class Meta:
         model = Gallery
-        fields = "__all__"
+        fields = [
+            "id",
+            "title",
+            "media_type",
+            "file",
+            "created_at",
+        ]
 
-    def get_file(self, obj):
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+
         try:
-            return obj.file.url
+            representation["file"] = instance.file.url
         except:
-            return ""
+            representation["file"] = ""
+
+        return representation
