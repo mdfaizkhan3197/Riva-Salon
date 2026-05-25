@@ -386,7 +386,9 @@ export default function Home() {
                 {item.media_type === "image" ? (
 
                   <img
-                    src={`${BASE_URL}${item.file}`}
+                    src={ item.file.startsWith("http")
+                      ?item.file
+                      :`${BASE_URL}${item.file}`}
                     alt="Gallery"
                     loading="lazy"
                     className="w-full h-[320px] sm:h-[400px] lg:h-[450px] object-cover group-hover:scale-110 transition duration-700"
@@ -395,7 +397,9 @@ export default function Home() {
                 ) : (
 
                   <video
-                    src={`${BASE_URL}${item.file}`}
+                    src={item.file.startsWith("http")
+                      ?item.file
+                      :`${BASE_URL}${item.file}`}
                     className="w-full h-[320px] sm:h-[400px] lg:h-[450px] object-cover"
                     autoPlay
                     muted
